@@ -1,13 +1,17 @@
 <script>
+    import {createEDHRecLink} from '../lib/models/card.models'
+
     export let card = {};
 
     $: src = card.image_uris.normal
     $: alt = card.name
-    $:console.log(card.image_uris)
+    $: href = createEDHRecLink(card.name)
 </script>
 
 <div class="card">
-    <img class="card-image" {src} {alt}>
+    <a {href} target="_blank" rel="noreferrer">
+        <img class="card-image" {src} {alt}>
+    </a>
 </div>
 
 <style>

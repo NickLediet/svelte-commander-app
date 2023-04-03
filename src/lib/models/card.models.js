@@ -1,8 +1,23 @@
-import { SCRYFALL_API_BASE_URL, CARDS_RANDOM_ENDPOINT } from '../constants'
+import { 
+    SCRYFALL_API_BASE_URL, 
+    CARDS_RANDOM_ENDPOINT,
+    IS_COMMANDER,
+    IN_PAPER
+} from '../constants'
+
+export function buildDefaultSearchQuery(queries) {
+    const queryList = queries.join(' ')
+
+    return `q=${queryList}`
+}
 
 export function getRandomCard(scryfallSearchQuery = '') {
-    let url = `${SCRYFALL_API_BASE_URL}/${CARDS_RANDOM_ENDPOINT}` 
-    let searchQuery = `?q=type:legendary`
+    let url = `${SCRYFALL_API_BASE_URL}/${CARDS_RANDOM_ENDPOINT}`
+    
+    let searchQuery = '?' + buildDefaultSearchQuery([
+        IS_COMMANDER,
+        IN_PAPER
+    ])
 
     if(scryfallSearchQuery) {
       searchQuery += ` ${scryfallSearchQuery}`  
@@ -29,6 +44,15 @@ export async function getRandomCardCollection({
         uniqueCardNames[card.name] = card.name;
         cards.push(card)
     }
-    console.log(uniqueCardNames)
+
     return cards;
+}
+
+export function createEDHRecLink(cardName) {
+    const cardPath = cardName
+        .replace(/[^\w\s]/gi, '')
+        .replace(/\s/gi, '-')
+        .toLowerCase()
+
+    return `https://edhrec.com/commanders/${cardPath}`;
 }
